@@ -1,17 +1,20 @@
 # netlify.toml
+
 [build]
+  # Comando para construir o frontend
   command = "npm install && npm run build --prefix frontend"
+  # Diretório de publicação do frontend
   publish = "frontend/dist"
 
 [functions]
+  # Diretório das funções serverless
   directory = "netlify/functions"
+  # Empacotador de funções Node.js
   node_bundler = "esbuild"
 
-  # Força o esbuild a não externalizar *nada* por padrão, exceto as dependências padrão do Node.js.
-  # Isso faz com que ele tente empacotar TUDO do node_modules.
-  external_node_modules = [] 
+  # Linha comentada conforme sugestão para permitir que o esbuild externalize módulos.
+  # external_node_modules = []
 
-  # Certifique-se de que o caminho para o node_modules da função é claro para o bundler.
-  # Se você moveu o package.json da função para a raiz, o postinstall já cuida da instalação.
-  # Esta linha é uma redundância para garantir que ele encontre os arquivos.
-  included_files = ["netlify/functions/node_modules/**"]
+  # Linha comentada conforme sugestão. Avalie a necessidade de descomentar
+  # apenas se tiver um setup específico de node_modules dentro de netlify/functions.
+  # included_files = ["netlify/functions/node_modules/**"]
