@@ -1,15 +1,21 @@
 # netlify.toml
 [build]
-  command = "npm install --prefix frontend && npm run build --prefix frontend" # Instala e constrói o frontend
-  publish = "frontend/dist"               # Onde o Vite gera os arquivos de build do React
+  command = "npm install && npm run build --prefix frontend"
+  publish = "frontend/dist"
 
 [functions]
-  directory = "netlify/functions"         # Onde suas funções Netlify estão localizadas
-  node_bundler = "esbuild"                # Voltemos ao esbuild, que é o padrão moderno
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+  
+  # Esta linha é a tentativa mais recente para resolver o erro ENOENT do pdf-parse.
+  # Ela informa ao esbuild para não empacotar pdfjs-dist diretamente, mas sim tratá-lo como externo.
+  external_node_modules = ["pdfjs-dist"] 
 
-  # MUITO IMPORTANTE: Especifica a pasta node_modules dentro do diretório da função
-  # Certifique-se de que o caminho está correto em relação à raiz do seu repositório.
-  included_files = [
-    "netlify/functions/node_modules/**"
-  ]
-  # A linha external_node_modules NÃO deve estar presente aqui, pois queremos que elas sejam empacotadas.
+  # A linha included_files geralmente não é necessária se o npm install na raiz
+  # já instala as dependências na pasta das funções via script postinstall (como configuramos).
+  # No entanto, se o problema persistir, poderíamos considerar reativá-la com cautela.
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
