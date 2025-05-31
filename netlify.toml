@@ -5,10 +5,10 @@
 
 [functions]
   directory = "netlify/functions"         # Onde suas funções Netlify estão localizadas
-  node_bundler = "esbuild"                # Bundler de funções (rápido e eficiente)
-  # Importante: Estas bibliotecas devem ser empacotadas externamente pelo Netlify.
-  # Certifique-se de que estão listadas aqui.
-  external_node_modules = ["pdf-parse", "multiparty"]
+  node_bundler = "zisi"                   # Usamos "zisi" para melhor empacotamento de dependências
+  
+  # Esta linha é crucial para garantir que os node_modules da função sejam incluídos
+  included_files = ["netlify/functions/node_modules/**"]
 
 [[redirects]]
   from = "/api/*"
