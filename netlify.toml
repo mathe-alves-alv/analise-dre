@@ -5,12 +5,11 @@
 
 [functions]
   directory = "netlify/functions"         # Onde suas funções Netlify estão localizadas
-  node_bundler = "zisi"                   # Usamos "zisi" para melhor empacotamento de dependências
-  
-  # Esta linha é crucial para garantir que os node_modules da função sejam incluídos
-  included_files = ["netlify/functions/node_modules/**"]
+  node_bundler = "esbuild"                # Voltemos ao esbuild, que é o padrão moderno
 
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/:splat"      # Redireciona chamadas /api para suas funções Netlify
-  status = 200
+  # MUITO IMPORTANTE: Especifica a pasta node_modules dentro do diretório da função
+  # Certifique-se de que o caminho está correto em relação à raiz do seu repositório.
+  included_files = [
+    "netlify/functions/node_modules/**"
+  ]
+  # A linha external_node_modules NÃO deve estar presente aqui, pois queremos que elas sejam empacotadas.
