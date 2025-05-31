@@ -6,16 +6,12 @@
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
-  
-  # Esta linha é a tentativa mais recente para resolver o erro ENOENT do pdf-parse.
-  # Ela informa ao esbuild para não empacotar pdfjs-dist diretamente, mas sim tratá-lo como externo.
-  external_node_modules = ["pdfjs-dist"] 
 
-  # A linha included_files geralmente não é necessária se o npm install na raiz
-  # já instala as dependências na pasta das funções via script postinstall (como configuramos).
-  # No entanto, se o problema persistir, poderíamos considerar reativá-la com cautela.
+  # Força o esbuild a não externalizar *nada* por padrão, exceto as dependências padrão do Node.js.
+  # Isso faz com que ele tente empacotar TUDO do node_modules.
+  external_node_modules = [] 
 
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/:splat"
-  status = 200
+  # Certifique-se de que o caminho para o node_modules da função é claro para o bundler.
+  # Se você moveu o package.json da função para a raiz, o postinstall já cuida da instalação.
+  # Esta linha é uma redundância para garantir que ele encontre os arquivos.
+  included_files = ["netlify/functions/node_modules/**"]
