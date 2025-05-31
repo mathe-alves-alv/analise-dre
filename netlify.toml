@@ -1,0 +1,16 @@
+# netlify.toml
+[build]
+  command = "npm install --prefix frontend && npm run build --prefix frontend" # Instala e constrói o frontend
+  publish = "frontend/dist"               # Onde o Vite gera os arquivos de build do React
+
+[functions]
+  directory = "netlify/functions"         # Onde suas funções Netlify estão localizadas
+  node_bundler = "esbuild"                # Bundler de funções (rápido e eficiente)
+  # Importante: Estas bibliotecas devem ser empacotadas externamente pelo Netlify.
+  # Certifique-se de que estão listadas aqui.
+  external_node_modules = ["pdf-parse", "multiparty"]
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"      # Redireciona chamadas /api para suas funções Netlify
+  status = 200
